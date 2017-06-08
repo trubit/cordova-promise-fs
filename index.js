@@ -560,6 +560,13 @@ module.exports = function(options){
     if(typeof onprogress === 'function') ft.onprogress = onprogress;
     var promise = new Promise(function(resolve,reject){
       var attempt = function(err){
+        // handle error events
+        if(err && ft.onprogress) {
+          var ev = new ProgressEvent();
+          ev.error = err;
+          ft.onprogress(ev);
+        }
+
         if(transferOptions.retry.length === 0) {
           if(options.debug) console.log('FileTransfer Error: '+serverUrl,err);
           reject(err);
