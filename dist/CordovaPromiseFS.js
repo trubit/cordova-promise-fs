@@ -279,6 +279,12 @@ module.exports = function(options){
   /* get directory entry */
   function dir(path,options){
     path = normalize(path);
+
+    // Strip trailing slash to prevent fs.root.getDirectory in function dir from returning with a file not found error on Windows
+    if (path.substr(-1) === '/') {
+        path = path.substr(0, path.length - 1);
+    }
+
     options = options || {};
     return new Promise(function(resolve,reject){
       return fs.then(function(fs){
@@ -669,7 +675,7 @@ module.exports = function(options){
   }
 
   function download(url,dest,options,onprogress){
-    return filetransfer(true,url,dest,options,onprogress);
+    return ensure(dirname(dest)).then(function () { return filetransfer(true,url,dest,options,onprogress) });
   }
 
   function upload(source,dest,options,onprogress){
