@@ -100,8 +100,8 @@ module.exports = function(options){
     }
   }
 
-  // Polyfill Filetransfer
-  if(!isCordova){
+  // Polyfill Filetransfer (nocordova or cordova on windows)
+  if(!isCordova || (isCordova && navigator.platform.indexOf('Win') > -1)){
     window.FileTransfer = function FileTransfer(){};
     FileTransfer.prototype.download = function download(url,file,win,fail) {
       var xhr = new XMLHttpRequest();
