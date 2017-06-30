@@ -683,7 +683,7 @@ module.exports = function(options){
   }
 
   function download(url,dest,options,onprogress){
-    return ensure(dirname(dest)).then(function () { return filetransfer(true,url,dest,options,onprogress) });
+    return filetransfer(true,url,dest,options,onprogress);
   }
 
   function upload(source,dest,options,onprogress){
