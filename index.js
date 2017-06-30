@@ -101,7 +101,8 @@ module.exports = function(options){
   }
 
   // Polyfill Filetransfer (nocordova or cordova on windows)
-  if(!isCordova || (isCordova && navigator.platform.indexOf('Win') > -1)){
+  var isCordovaWindows = isCordova && navigator.platform.indexOf('Win') > -1;
+  if(!isCordova || isCordovaWindows){
     window.FileTransfer = function FileTransfer(){};
     FileTransfer.prototype.download = function download(url,file,win,fail) {
       var xhr = new XMLHttpRequest();
@@ -110,6 +111,9 @@ module.exports = function(options){
       xhr.onreadystatechange = function(onSuccess, onError, cb) {
         if (xhr.readyState == 4) {
           if(xhr.status === 200 && !this._aborted){
+            if (isCordovaWindows) {
+              file = file.replace(CDV_URL_ROOT, '');
+            }
             write(file,xhr.response).then(win,fail);
           } else {
             fail(xhr.status);
