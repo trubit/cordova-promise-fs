@@ -171,7 +171,7 @@ module.exports = function(options){
   }
 
   // Polyfill Filetransfer (nocordova or cordova on windows)
-  var isCordovaWindows = isCordova && navigator.platform.indexOf('Win') > -1;
+  var isCordovaWindows = isCordova && navigator.userAgent.indexOf('Win') > -1;
   if(!isCordova || isCordovaWindows){
     window.FileTransfer = function FileTransfer(){};
     FileTransfer.prototype.download = function download(url,file,win,fail) {
